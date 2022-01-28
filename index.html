@@ -53,59 +53,64 @@
 
         <hr id="line">
         <div class="main">
-            <br><br>
+        </div>
+        <div class="footer">
+            <hr id="linefooter">
+            <h1 style="font-size: 20px;text-align: center; padding: 10px 0 10px 0;">© Smart Shop</h1>
+        </div>
+    </div>
 
-            <script>
+    <script>
 
-                //References
-                // let userLink = document.getElementById("userLink");
-                let logOutLink = document.getElementById("logOutLink");
-                var currentUser = null;
+        //References
+        // let userLink = document.getElementById("userLink");
+        let logOutLink = document.getElementById("logOutLink");
+        var currentUser = null;
 
-                //Functions
-                function getUserName()
-                {
-                    let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+        //Functions
+        function getUserName()
+        {
+            let keepLoggedIn = localStorage.getItem("keepLoggedIn");
 
-                    if (keepLoggedIn == "yes")
-                    {
-                        currentUser = JSON.parse(localStorage.getItem("userDetails"));
-                    }
+            if (keepLoggedIn == "yes")
+            {
+                currentUser = JSON.parse(localStorage.getItem("userDetails"));
+            }
 
-                    else
-                    {
-                        currentUser = JSON.parse(sessionStorage.getItem("userDetails"));
-                    }
-                }
+            else
+            {
+                currentUser = JSON.parse(sessionStorage.getItem("userDetails"));
+            }
+        }
 
-                function logOut()
-                {
-                    sessionStorage.removeItem("userDetails");
-                    localStorage.removeItem("userDetails");
-                    localStorage.removeItem("keepLoggedIn");
-                    window.location = "/src/html/login.html";
-                }
+        function logOut()
+        {
+            sessionStorage.removeItem("userDetails");
+            localStorage.removeItem("userDetails");
+            localStorage.removeItem("keepLoggedIn");
+            window.location = "/src/html/login.html";
+        }
 
-                window.onload = function ()
-                {
-                    let keepLoggedIn = localStorage.getItem("keepLoggedIn");
-                    if ((JSON.parse(sessionStorage.getItem("userDetails"))) == null && keepLoggedIn != "yes")
-                        window.location = "src/html/login.html";
-                    getUserName();
-                    if (currentUser == null)
-                    {
-                        // userLink.href = "register.html";
-                        logOutLink.href = "/src/html/login.html";
-                    }
+        window.onload = function ()
+        {
+            let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+            if ((JSON.parse(sessionStorage.getItem("userDetails"))) == null && keepLoggedIn != "yes")
+                window.location = "src/html/login.html";
+            getUserName();
+            if (currentUser == null)
+            {
+                // userLink.href = "register.html";
+                logOutLink.href = "/src/html/login.html";
+            }
 
-                    else
-                    {
-                        // userLink.href = "#";
-                        logOutLink.href = "javascript:logOut()";
-                    }
-                }
-            </script>
-     <script src="src/js/temp.js"></script>
+            else
+            {
+                // userLink.href = "#";
+                logOutLink.href = "javascript:logOut()";
+            }
+        }
+    </script>
+    <script src="src/js/temp.js"></script>
     <script src="src/js/animation.js"></script>
 </body>
 
