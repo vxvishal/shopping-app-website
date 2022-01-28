@@ -1,0 +1,27 @@
+body {
+    background-color: #212F3D !important;
+    font-family: monospace !important;
+  }
+
+.colour
+{
+    background-color: #A923AD;
+    /* border-radius: 10px; */
+}
+  
+  .btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .top-space-signup
+  {
+      margin-top: 25px;
+  }
+
+  .top-space-login
+  {
+      margin-top: 75px;
+  }
+ 

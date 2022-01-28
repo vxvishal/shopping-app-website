@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/css/login-signup.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" rel="script" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+        integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container top-space-signup">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card border-0 shadow rounded my-5 colour">
+                    <div class="card-body p-4 p-sm-5 colour">
+                        <h1 class=" text-white text-center mb-5 fw-bold">Sign Up</h1>
+                        <form>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="name-input" placeholder="Full name">
+                                <label for="floatingInput">Full Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email-input"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Email address</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="username-input" placeholder="username">
+                                <label for="floatingInput">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password-input" placeholder="Password">
+                                <label for="floatingPassword">Password</label>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="button"
+                                    id="submit-button">Sign
+                                    up</button>
+                                <h5 class="mt-2 text-white text-center">or</h5>
+                                <button class="btn btn-success btn-login text-uppercase fw-bold"
+                                    onclick="window.location.href='login.html'" type="button">Log
+                                    in</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMO-0ilRoZienlonOk4tqi9yAa-u5TuyA",
+            authDomain: "shopping-app-website.firebaseapp.com",
+            databaseURL: "https://shopping-app-website-default-rtdb.firebaseio.com",
+            projectId: "shopping-app-website",
+            storageBucket: "shopping-app-website.appspot.com",
+            messagingSenderId: "1092292558083",
+            appId: "1:1092292558083:web:a87dc3a5e84c9ef8af3d36",
+            measurementId: "G-GYRM5K8BBN"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import { getDatabase, ref, set, child, get }
+            from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+
+        const analytics = getAnalytics(app);
+        const database = getDatabase();
+
+        // References
+        const name = document.getElementById("name-input");
+        const email = document.getElementById("email-input");
+        const username = document.getElementById("username-input");
+        const password = document.getElementById("password-input");
+        const submit = document.getElementById("submit-button");
+
+        //Validations 
+        function isEmptyOrSpace(st)
+        {
+            return (st === null || st.match(/^ *$/) !== null)
+        }
+        function Validation()
+        {
+            let nameregex = /^[a-zA-Z\s]+$/;
+            let emailregex = /^[a-zA-Z0-9]+@(gmail|yahoo|outlook)\.com$/;
+            let usernameregex = /^[a-zA-Z0-9]{5,}$/;
+
+            if (isEmptyOrSpace(name.value) || isEmptyOrSpace(email.value) || isEmptyOrSpace(username.value) || isEmptyOrSpace(password.value))
+            {
+                alert("The fields cannot be empty");
+                return;
+            }
+
+            if (!nameregex.test(name.value))
+            {
+                alert("Name can only contain alphabets");
+                return false;
+            }
+
+            if (!emailregex.test(email.value))
+            {
+                alert("Enter a valid email address");
+                return false;
+            }
+
+            if (!usernameregex.test(username.value))
+            {
+                alert("Username can only contain alphabets and numbers minimum 5 characters long");
+                return false;
+            }
+
+            return true;
+        }
+
+        function registerUser()
+        {
+            if (!Validation())
+            {
+                return;
+            }
+            const databaseReference = ref(database);
+
+            get(child(databaseReference, "UsersList/" + username.value)).then((snapshot) =>
+            {
+                if (snapshot.exists())
+                { alert("Account already exists"); }
+
+                else
+                {
+                    set(ref(database, "UsersList/" + username.value),
+                        {
+                            fullname: name.value,
+                            email: email.value,
+                            username: username.value,
+                            password: encryptPassword()
+                        })
+                        .then(() => 
+                        {
+                            alert("Account created successfully");
+                        })
+                        .catch((error) =>
+                        {
+                            alert("Error creating account: " + error)
+                        })
+                }
+            });
+        }
+
+        //Encrypting 
+        function encryptPassword()
+        {
+            var encryptedPassword = CryptoJS.AES.encrypt(password.value, password.value);
+            return encryptedPassword.toString();
+        }
+
+        //Assigning events 
+        submit.addEventListener('click', registerUser);
+    </script>
+</body>
+
+</html>

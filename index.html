@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="src/css/loadingAnimation.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <link rel="icon" href="assests/logo.png" type="png">
+    <title>Smart Shop</title>
+</head>
+
+<body>
+    <div class="animation">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    <div class="after-animation">
+        <nav class="navbar">
+            <div class="logo"><a href="index.html"><img src="assests/logo.png" alt="" class="logo"></a></div>
+            <h1 class="title"><a href="index.html"><img src="assests/">Smart Shop</a></h1>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a id="logOutLink"
+                        class="text-4xl bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-14 rounded">
+                        Log out
+                    </a>
+                </li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar first"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+
+        <hr id="line">
+        <div class="main">
+            <br><br>
+
+            <script>
+
+                //References
+                // let userLink = document.getElementById("userLink");
+                let logOutLink = document.getElementById("logOutLink");
+                var currentUser = null;
+
+                //Functions
+                function getUserName()
+                {
+                    let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+                    if (keepLoggedIn == "yes")
+                    {
+                        currentUser = JSON.parse(localStorage.getItem("userDetails"));
+                    }
+
+                    else
+                    {
+                        currentUser = JSON.parse(sessionStorage.getItem("userDetails"));
+                    }
+                }
+
+                function logOut()
+                {
+                    sessionStorage.removeItem("userDetails");
+                    localStorage.removeItem("userDetails");
+                    localStorage.removeItem("keepLoggedIn");
+                    window.location = "login.html";
+                }
+
+                window.onload = function ()
+                {
+                    let keepLoggedIn = localStorage.getItem("keepLoggedIn");
+                    if ((JSON.parse(sessionStorage.getItem("userDetails"))) == null && keepLoggedIn != "yes")
+                        window.location = "src/html/login.html";
+                    getUserName();
+                    if (currentUser == null)
+                    {
+                        // userLink.href = "register.html";
+                        logOutLink.href = "src/html/login.html";
+                    }
+
+                    else
+                    {
+                        // userLink.href = "#";
+                        logOutLink.href = "javascript:logOut()";
+                    }
+                }
+            </script>
+     <script src="src/js/temp.js"></script>
+    <script src="src/js/animation.js"></script>
+</body>
+
+</html>
